@@ -1,0 +1,95 @@
+server:
+  port: 8084
+spring:
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  # zipkin:
+  #     baseUrl: http://10.178.143.175:9411/
+  #     sender:
+  #       type: web
+  #     service:
+  #       name: ${spring.application.name}
+  #     enabled: true
+  # sleuth:
+  #   messaging:
+  #     enabled: false
+  #   sampler:
+  #     probability: 1.0
+  rabbitmq:
+    host: 10.178.143.178
+    username: pubService
+    password: '!!pubpub!!'
+    port: 5672
+    virtualHost: vas
+  #kafka:
+  #  consumer:
+  #    enableAutoCommit: false
+  cloud:
+    stream:
+      defaultBinder: kafka
+      kafka:
+        bindings:
+          vasMeta:
+            consumer:
+              #autoCommitOffset: false
+              #ackMode: MANUAL
+              destinationIsPattern: true
+          vasStatus:
+            consumer:
+              #autoCommitOffset: false
+              #ackMode: MANUAL
+              destinationIsPattern: true
+          vasRstGis:
+            consumer:
+              #autoCommitOffset: false
+              #ackMode: MANUAL
+              destinationIsPattern: true
+        binder:
+          brokers: 10.178.143.172:9092, 10.178.143.173:9092, 10.178.143.187:9092
+          configuration:
+            auto:
+              offset:
+                reset: latest
+            metadata:
+              max:
+                age:
+                  ms: 5000
+            key:
+              deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      bindings:
+        vasMeta:
+          destination: vas_meta_.*
+          group: PICK_META_202104_11
+          contentType: application/json
+        vasStatus:
+          destination: vas_meta_.*
+          contentType: application/json
+        vasRstGis:
+          destination: vas_rst_gis_.*
+          group: PICK_RST_GIS_202104_11
+          contentType: application/json
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://10.178.143.175:5432/aiden_cloud
+    username: visionai
+    password: '!skcc1234'
+
+logging:
+  level: INFO
+  config: classpath:config/logback-spring.xml
+
+picker:
+  meta: 200
+  status: 2000
+  rabbitDelay: 2500
+
+#Redis
+redis:
+  host: 10.178.143.175
+  port: 6379
+  password: '!skcc1234'
+  expireTime: 10

@@ -1,0 +1,102 @@
+uri:
+  #transmitter: 18080 (reserved)
+  user-mgmt: http://10.233.53.146:18081
+  device-mgmt: http://10.233.2.129:18082
+  event-mgmt: http://10.233.2.161:18083
+  #picker-service: 18084 (reserved)
+  history-service: http://10.233.12.98:18085
+  contract-mgmt: http://10.233.56.213:18086
+  dashboard-service: http://10.233.21.76:18087
+  #map-service: 18088 (reserved)
+
+
+server:
+  http2:
+    enabled: true
+  compression:
+    enabled: true
+    mimeTypes: application/json, application/xml, text/html, text/xml, text/plain, application/gzip
+  port: 18080
+
+ribbon:
+  ReadTimeout: 10000
+  eagerLoad:
+    enabled: true
+
+graphql:
+  tools:
+      introspectionEnabled: false
+  servlet:
+    mapping: /api/graphql
+    exceptionHandlersEnabled: true
+    enabled: true
+    corsEnabled: true
+    cors:
+      allowed-origins: '*'
+    websocket:
+        enabled: false
+        
+jwt:
+  expireTime: 72
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+redis:
+  host: 10.178.143.175
+  password: '!skcc1234'
+  port: 6379
+
+logging:
+  config: classpath:config/logback-spring.xml
+
+zuul:
+  ignoredHeaders: Cookie, Set-Cookie, Access-Control-Allow-Credentials, Access-Control-Allow-Origin
+  ignoredServices: '''*'''
+  prefix: /api
+  routes:
+    user-mgmt:
+      path: /user/**
+      url: ${uri.user-mgmt}
+      sensitiveHeaders: ''
+    device-mgmt:
+      path: /device/**
+      url: ${uri.device-mgmt}
+      sensitiveHeaders: ''
+    event-mgmt:
+      path: /event/**
+      url: ${uri.event-mgmt}
+      sensitiveHeaders: ''
+    history-service:
+      path: /history/**
+      url: ${uri.history-service}
+      sensitiveHeaders: ''
+    contract-mgmt:
+      path: /contract/**
+      url: ${uri.contract-mgmt}
+      sensitiveHeaders: ''
+    dashboard-service:
+      path: /dashboard/**
+      url: ${uri.dashboard-service}
+      sensitiveHeaders: ''
+
+usermgmt:
+  ribbon:
+    eureka:
+      enabled: false
+    listOfServers: ${uri.user-mgmt}
+    ReadTimeOut: 5000
+    ConnectTimeOut: 3000
+    ServerListRefreshInterval: 15000
+
+devicemgmt:
+  ribbon:
+    eureka:
+      enabled: false
+    listOfServers: ${uri.device-mgmt}
+    ReadTimeOut: 5000
+    ConnectTimeOut: 3000
+    ServerListRefreshInterval: 15000

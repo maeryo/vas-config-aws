@@ -1,0 +1,29 @@
+netty:
+    tcpPort: 8888
+    bossCount: 1
+    workerCount: 10
+    keepAlive: true
+    backlog: 100
+    readTimeout: 60
+
+kafka:
+    producer:
+        bootstrap: 169.56.76.185:19092, 169.56.76.185:19092, 169.56.76.190:19092
+        topic: vas
+        acks: 1
+        compressionType: none
+        clientId: transmitter-dev
+
+device:
+    handler:
+        gatewayAddress: https://aidengwd.skcc.com
+        packetDumpEnabled: false
+        packetDumpRootPath: /mnt/dump/raw
+        dumpStorageDuration: 30
+        dumpMinutePerFile: 10
+
+spring:
+    datasource:
+        url: jdbc:postgresql://169.56.76.183:5432/aiden_cloud
+        username: visionai
+        password: '!skcc1234'

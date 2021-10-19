@@ -1,0 +1,120 @@
+uri:
+  user-mgmt: http://localhost:8081
+  device-mgmt: http://localhost:8082
+  event-mgmt: http://localhost:8083
+  #picker-service: 8084 (reserved)
+  history-service: http://localhost:8085
+  contract-mgmt: http://localhost:8086
+  dashboard-service: http://localhost:8087
+  #transmitter: 8088 (reserved)
+
+server:
+  error:
+    whitelabel:
+      enabled: false
+    path: /error
+  compression:
+    enabled: true
+    mimeTypes: application/json, application/xml, text/html, text/xml, text/plain, application/gzip
+  port: 8080
+
+jwt:
+  expireTime: 72
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+graphql:
+  tools:
+      introspectionEnabled: false
+  servlet:
+    mapping: /api/graphql
+    exceptionHandlersEnabled: true
+    enabled: true
+    corsEnabled: true
+    cors:
+      allowed-origins: '*'
+    websocket:
+        enabled: false
+        
+redis:
+  host: 169.56.76.183
+  password: '!skcc1234'
+  port: 6379
+
+logging:
+  config: classpath:config/logback-spring.xml
+
+#Sleuth & Zipkin
+# spring.sleuth.sampler.probability=1.0
+# spring.sleuth.web.client.enabled=true
+# spring.zipkin.baseUrl=http://169.56.76.183:9411
+# spring.zipkin.sender.type=web
+# spring.zipkin.service.name=${spring.application.name}
+
+zuul:
+  ignoredHeaders: Cookie, Set-Cookie, Access-Control-Allow-Credentials, Access-Control-Allow-Origin
+  ignoredServices: '''*'''
+  prefix: /api
+  routes:
+    user-mgmt:
+      path: /user/**
+      url: ${uri.user-mgmt}
+      sensitiveHeaders: ''
+    device-mgmt:
+      path: /device/**
+      url: ${uri.device-mgmt}
+      sensitiveHeaders: ''
+    event-mgmt:
+      path: /event/**
+      url: ${uri.event-mgmt}
+      sensitiveHeaders: ''
+    history-service:
+      path: /history/**
+      url: ${uri.history-service}
+      sensitiveHeaders: ''
+    contract-mgmt:
+      path: /contract/**
+      url: ${uri.contract-mgmt}
+      sensitiveHeaders: ''
+    dashboard-service:
+      path: /dashboard/**
+      url: ${uri.dashboard-service}
+      sensitiveHeaders: ''
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000
+
+usermgmt:
+  ribbon:
+    eureka:
+      enabled: false
+    listOfServers: ${uri.user-mgmt}
+    ReadTimeOut: 5000
+    ConnectTimeOut: 3000
+    ServerListRefreshInterval: 15000
+
+devicemgmt:
+  ribbon:
+    eureka:
+      enabled: false
+    listOfServers: ${uri.device-mgmt}
+    ReadTimeOut: 5000
+    ConnectTimeOut: 3000
+    ServerListRefreshInterval: 15000
+
+eventmgmt:
+  ribbon:
+    eureka:
+      enabled: false
+    listOfServers: ${uri.event-mgmt}
+    ReadTimeOut: 5000
+    ConnectTimeOut: 3000
+    ServerListRefreshInterval: 15000

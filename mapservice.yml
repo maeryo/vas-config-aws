@@ -1,0 +1,48 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: mapservice
+  cloud:
+    config:
+      enabled: false
+    stream:
+      defaultBinder: kafka
+      kafka:
+        binder:
+          brokers: 10.178.143.172:9092, 10.178.143.173:9092, 10.178.143.187:9092
+          configuration:
+            auto:
+              offset:
+                reset: latest
+            metadata:
+              max:
+                age:
+                  ms: 5000
+            key:
+              deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      bindings:
+        vasAnalyticsStart:
+          destination: vas_analytics_start
+          group: ANALYTICS_START
+          contentType: application/json
+        vasAnalyticsStop:
+          destination: vas_analytics_stop
+          contentType: application/json
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://10.178.143.175:5432/aiden_cloud
+    username: visionai
+    password: '!skcc1234'
+
+logging:
+  config: classpath:config/logback-spring.xml
+
+uri:
+  gis-server: http://10.178.143.179:5000
+
+gpx:
+  directory: /mnt/dump/gpx
+  expiration: 90
+  slackUrl: https://hooks.slack.com/services/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
+  push: true

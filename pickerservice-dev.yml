@@ -1,0 +1,76 @@
+server:
+  port: 8084
+spring:
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  rabbitmq:
+    host: 169.56.115.175
+    username: pubService
+    password: '!!pubpub!!'
+    port: 5672
+    virtualHost: vas
+  kafka:
+    consumer:
+      enableAutoCommit: false
+  cloud:
+    stream:
+      defaultBinder: kafka
+      kafka:
+        bindings:
+          vasMeta:
+            consumer:
+              destinationIsPattern: true
+          vasStatus:
+            consumer:
+              destinationIsPattern: true
+          vasRstGis:
+            consumer:
+              destinationIsPattern: true
+        binder:
+          brokers: 169.56.76.185:19092, 169.56.76.178:19092, 169.56.76.190:19092
+          configuration:
+            auto:
+              offset:
+                reset: latest
+            metadata:
+              max:
+                age:
+                  ms: 5000
+            key:
+              deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      bindings:
+        vasMeta:
+          destination: vas_meta_.*
+          group: PICK_META_TEST_2021
+          contentType: application/json
+        vasStatus:
+          destination: vas_meta_.*
+          contentType: application/json
+        vasRstGis:
+          destination: vas_rst_gis_.*
+          group: PICK_RST_GIS_TEST_2021
+          contentType: application/json
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://169.56.76.183:5432/aiden_cloud
+    username: visionai
+    password: '!skcc1234'
+
+logging:
+  config: classpath:config/logback-spring.xml
+
+picker:
+  meta: 200
+  status: 3000
+  rabbitDelay: 2000
+
+#Redis
+redis:
+  host: 169.56.76.183
+  port: 6379
+  password: '!skcc1234'
+  expireTime: 10

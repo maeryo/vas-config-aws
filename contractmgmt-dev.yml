@@ -1,0 +1,33 @@
+server:
+  port: 8086
+  
+spring:
+  jackson:
+    serialization:
+      indent-output: true
+
+#Database
+  datasource:
+    url: jdbc:postgresql://169.56.76.183:5432/aiden_cloud
+    username: visionai
+    password: '!skcc1234'
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+#GraphQL
+graphql:
+  tools:
+      introspectionEnabled: false
+  servlet:
+    mapping: /graphql
+    enabled: true
+    corsEnabled: true
+    exceptionHandlersEnabled: true
+
+#Logging
+logging:
+  config: classpath:config/logback-spring.xml

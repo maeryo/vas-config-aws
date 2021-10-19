@@ -1,0 +1,99 @@
+server:
+  port: 8083
+spring:
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  # zipkin:
+  #     baseUrl: http://10.178.143.175:9411/
+  #     sender:
+  #       type: web
+  #     service:
+  #       name: ${spring.application.name}
+  #     enabled: true
+  # sleuth:
+  #   messaging:
+  #     enabled: false
+  #   sampler:
+  #     probability: 1.0
+  rabbitmq:
+    host: 10.178.143.178
+    username: pubService
+    password: '!!pubpub!!'
+    port: 5672
+    virtualHost: vas
+  #kafka:
+  #  consumer:
+  #    enableAutoCommit: false
+  cloud:
+    stream:
+      defaultBinder: kafka
+      kafka:
+        bindings:
+          vasRstAi:
+            consumer:
+              #autoCommitOffset: false
+              #ackMode: MANUAL
+              destinationIsPattern: true
+        binder:
+          brokers: 10.178.143.172:9092, 10.178.143.173:9092, 10.178.143.187:9092
+          configuration:
+            auto:
+              offset:
+                reset: latest
+            key:
+              deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            request:
+              timeout:
+                ms: 60000
+            retries: 3
+            metadata:
+              max:
+                age:
+                  ms: 5000
+      bindings:
+        vasLog:
+          destination: vas_log
+          contentType: application/json
+        vasRstAi:
+          destination: vas_rst_ai.*
+          group: EVT_RST_AI_20210412_0027
+          contentType: application/json
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://10.178.143.175:5432/aiden_cloud
+    username: visionai
+    password: '!skcc1234'
+
+graphql:
+  tools:
+      introspectionEnabled: false
+  servlet:
+    mapping: /graphql
+    exceptionHandlersEnabled: true
+    enabled: true
+    corsEnabled: true
+    cors:
+      allowed-origins: '*'
+    websocket:
+        enabled: false
+
+logging:
+  level: INFO
+  config: classpath:config/logback-spring.xml
+
+picker:
+  aiSendInterval: 1000
+  aiCluster: 5
+  limitClusterTime: 120
+  rabbitDelay: 2500
+
+#Redis
+redis:
+  host: 10.178.143.175
+  port: 6379
+  password: '!skcc1234'
+  expireTime: 10

@@ -1,0 +1,38 @@
+server:
+  compression:
+    enabled: true
+    mimeTypes: application/json, application/xml, text/html, text/xml, text/plain, application/gzip
+  port: 8085
+
+logging:
+  config: classpath:config/logback-spring.xml
+
+elasticsearch:
+  host: 169.56.115.190
+  port: 9200
+  clusterName: elasticsearch
+
+graphql:
+  tools:
+      introspectionEnabled: false
+  servlet:
+    mapping: /graphql
+    exceptionHandlersEnabled: true
+    enabled: true
+    corsEnabled: true
+    cors:
+      allowed-origins: '*'
+    websocket:
+        enabled: false
+        
+spring:
+  datasource:
+    url: jdbc:postgresql://169.56.76.183:5432/aiden_cloud
+    username: visionai
+    password: '!skcc1234'
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true

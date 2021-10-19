@@ -1,0 +1,86 @@
+uri:
+  event-mgmt: http://169.56.115.174:30100
+
+server:
+  port: 8082
+
+netty:
+  tcpPort: 3500
+  bossCount: 1
+  workerCount: 10
+  keepAlive: true
+  backlog: 100
+  readTimeout: 60
+
+spring:
+  jackson:
+    serialization:
+      indent-output: true
+  rabbitmq:
+    host: 169.56.115.175
+    username: pubService
+    password: '!!pubpub!!'
+    port: 5672
+    virtualHost: vas
+  datasource:
+    url: jdbc:postgresql://169.56.76.183:5432/aiden_cloud
+    username: visionai
+    password: '!skcc1234'
+  cloud:
+    stream:
+      defaultBinder: kafka
+      kafka:
+        binder:
+          brokers: 169.56.76.185:19092, 169.56.76.178:19092, 169.56.76.190:19092
+          configuration:
+            auto:
+              offset:
+                reset: latest
+            key:
+              deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value:
+              deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      bindings:
+        vasHubControlPub:
+          destination: vas_hub_control
+          contentType: application/json
+        vasHubControlSub:
+          destination: vas_hub_control
+          contentType: application/json
+
+graphql:
+  tools:
+    introspectionEnabled: false
+  servlet:
+    mapping: /graphql
+    exceptionHandlersEnabled: true
+    enabled: true
+    corsEnabled: true
+    cors:
+      allowed-origins: '*'
+    websocket:
+        enabled: false
+
+logging:
+  level: 
+    org.apache.kafka.clients.FetchSessionHandler: DEBUG
+    org.apache.kafka.common.errors: DEBUG
+  config: classpath:config/logback-spring.xml
+
+redis:
+  host: 169.56.76.183
+  port: 6379
+  password: '!skcc1234'
+  expireTime: 10
+
+aiden:
+  transmitter:
+    ip: aidengwd.skcc.com
+    port: 8888
+    internalIp: 10.178.143.140
+    internalPort: 8888 
+  deviceMgmt:
+    ip: aidengwd.skcc.com
+    port: 30350
+    internalIp: 10.178.143.140
+    internalPort: 30350
