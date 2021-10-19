@@ -1,14 +1,13 @@
 uri:
   #transmitter: 18080 (reserved)
-  user-mgmt: http://10.233.53.146:18081
-  device-mgmt: http://10.233.2.129:18082
-  event-mgmt: http://10.233.2.161:18083
+  user-mgmt: http://10.100.165.143:18081
+  device-mgmt: http://10.100.53.235:18082
+  event-mgmt: http://10.100.132.155:18083
   #picker-service: 18084 (reserved)
-  history-service: http://10.233.12.98:18085
-  contract-mgmt: http://10.233.56.213:18086
-  dashboard-service: http://10.233.21.76:18087
-  #map-service: 18088 (reserved)
-
+  history-service: http://10.100.144.248:18085
+  contract-mgmt: http://10.100.186.88:18086
+  map-service: http://10.100.255.24:18087
+  #dashboard-service: 18088 (reserved)
 
 server:
   http2:
@@ -46,8 +45,7 @@ management:
         include: health
 
 redis:
-  host: 10.178.143.175
-  password: '!skcc1234'
+  host: aiden-redis.g7jadg.0001.apn2.cache.amazonaws.com
   port: 6379
 
 logging:
